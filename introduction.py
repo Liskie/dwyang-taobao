@@ -4,9 +4,14 @@ from data_models import User
 from db_manager import DBManager
 
 
-def update_user_expected_compensation(user: User, expected_compensation: str):
-    user.expected_compensation = expected_compensation
-    gr.Info(f"预期补偿金额提交成功！")
+def update_user_expected_compensation(user_student_id: str, expected_compensation: str):
+    if not user_student_id:
+        gr.Info(f"请先填写基本信息！")
+        return
+    with DBManager() as manager:
+        if not manager.check_user_exists_by_student_id(user_student_id):
+            gr.Info(f"请先填写基本信息！")
+        manager.update_user_expected_compensation(user_student_id, expected_compensation)
 
 
 with gr.Blocks() as introduction:
@@ -32,9 +37,34 @@ with gr.Blocks() as introduction:
     expected_compensation = gr.Textbox(label='预期赔偿金额', lines=1, placeholder="2400")
 
     submit_button = gr.Button("提交")
-    submit_button.click(update_user_expected_compensation, inputs=[expected_compensation],
-                        js="window.location.href = 'http://127.0.0.1:7862'")
+    submit_flag = gr.Textbox(label='隐藏标识', lines=1, placeholder="请勿填写", visible=False)
+    hidden_student_id = gr.Textbox(label='隐藏标识', lines=1, placeholder="请勿填写", visible=False)
 
+    get_user_student_id_from_cookie_js = """
+    function getStudentIdAndExpectedCompensation(hidden_student_id, expected_compensation) {
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                let cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    
+        const student_id = getCookie('user_student_id');
+        return [student_id, expected_compensation];
+    }
+    """
+    submit_button.click(update_user_expected_compensation, inputs=[hidden_student_id, expected_compensation],
+                        js=get_user_student_id_from_cookie_js)
+    # submit_flag.change(fn=lambda x: x, inputs=submit_flag,
+    #                    js="window.location.href = 'http://127.0.0.1:8000/introduction'")
 
 if __name__ == '__main__':
     introduction.launch(show_api=False, share=True)

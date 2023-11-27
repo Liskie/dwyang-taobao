@@ -47,9 +47,25 @@ class DBManager:
             raise Exception('Duplicate user exists!')
         return user_df.iloc[0].to_dict()
 
+    def check_user_exists_by_student_id(self, student_id: str) -> bool:
+        sql = '''select * from users where student_id = ?'''
+        data = [student_id]
+        user_df = pd.read_sql_query(sql, self.conn, params=data)
+        if len(user_df) == 0:
+            return False
+        if len(user_df) > 1:
+            raise Exception('Duplicate user exists!')
+        return True
+
     def update_user_conversation(self, user: User, conversation: list[dict[str, str]]) -> None:
         sql = '''update users set conversation = ? where student_id = ?'''
         data = (json.dumps(conversation), user.student_id)
+        self.cursor.execute(sql, data)
+        self.conn.commit()
+
+    def update_user_expected_compensation(self, user_student_id: str, expected_compensation: str) -> None:
+        sql = '''update users set expected_compensation = ? where student_id = ?'''
+        data = (expected_compensation, user_student_id)
         self.cursor.execute(sql, data)
         self.conn.commit()
 

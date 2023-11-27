@@ -24,7 +24,7 @@ with gr.Blocks() as user_info_collection:
                        info="请填写11位手机号码, 如果抽到电话回访并参与会有50元红包赠送哦")
 
     submit_button = gr.Button("提交")
-    submit_flag = gr.Textbox(label='隐藏标识', lines=1, placeholder="请勿填写")
+    submit_flag = gr.Textbox(label='隐藏标识', lines=1, placeholder="请勿填写", visible=False)
     save_student_id_to_cookie_js = """
     function saveStudentIdCookie(name, student_id, gender, phone) {
         var expires = new Date();
