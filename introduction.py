@@ -33,7 +33,7 @@ with gr.Blocks() as introduction:
 
     submit_button = gr.Button("提交")
     submit_button.click(update_user_expected_compensation, inputs=[expected_compensation],
-                        js="window.location.href = '127.0.0.1:7862'")
+                        js="window.location.href = 'http://127.0.0.1:7862'")
 
 
 if __name__ == '__main__':
