@@ -230,6 +230,16 @@ def update_next_page_button(history):
     return gr.Button(visible=False)
 
 
+def update_logo(neutrality_variable):
+    match neutrality_variable:
+        case NeutralityEnum.COURT.value:
+            return gr.Image('pics/logo_court.png', visible=True)
+        case NeutralityEnum.CUSTOMER_SERVICE.value:
+            return gr.Image('pics/logo_customer_service.png', visible=True)
+        case _:
+            raise ValueError(f"Unknown neutrality variable: {neutrality_variable}")
+
+
 with gr.Blocks() as conversation:
     gr.Markdown("""# Step 3：对话""")
 
@@ -238,6 +248,17 @@ with gr.Blocks() as conversation:
         neutrality_variable = gr.Radio(label='neutrality_variable', choices=[item.value for item in NeutralityEnum])
         replier_variable = gr.Radio(label='replier_variable', choices=[item.value for item in ReplierEnum])
         speech_variable = gr.Radio(label='speech_variable', choices=[item.value for item in SpeechEnum])
+
+    with gr.Row():
+        logo = gr.Image('pics/logo_court.png',
+                        height=60,
+                        width=60,
+                        scale=1,
+                        visible=False,
+                        interactive=False,
+                        show_label=False,
+                        show_download_button=False,
+                        label='logo')
 
     chatbot = gr.Chatbot(
         [[None, '']],
@@ -278,6 +299,8 @@ with gr.Blocks() as conversation:
         outputs=[student_id, neutrality_variable, replier_variable, speech_variable],
         js=prepare_cookie_loading_js,
         fn=get_user_variables_by_student_id,
+    ).then(
+        update_logo, neutrality_variable, logo, queue=False
     ).then(
         bot, [chatbot, student_id, neutrality_variable, replier_variable, speech_variable], chatbot
     ).then(
@@ -357,7 +380,7 @@ with gr.Blocks() as conversation:
     )
 
     is_user_conversation_saved.change(
-        None, None, None, js="window.location.href = 'http://127.0.0.1:8000/scale'"
+        None, None, None, js="window.location.href = 'http://49.232.250.86/scale'"
     )
 
 if __name__ == '__main__':

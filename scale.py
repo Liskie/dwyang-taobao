@@ -89,7 +89,7 @@ with gr.Blocks() as scale:
     )
     submit_flag.change(
         None, None, None,
-        js="window.location.href = 'http://127.0.0.1:8000/ending'"
+        js="window.location.href = 'http://49.232.250.86/ending'"
     )
 
 if __name__ == '__main__':

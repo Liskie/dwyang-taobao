@@ -69,7 +69,7 @@ with gr.Blocks() as introduction:
                         outputs=submit_flag,
                         js=get_user_student_id_from_cookie_js)
     submit_flag.change(None, None, None,
-                       js="window.location.href = 'http://127.0.0.1:8000/conversation'")
+                       js="window.location.href = 'http://49.232.250.86/conversation'")
 
 if __name__ == '__main__':
     introduction.launch(show_api=False, share=True)

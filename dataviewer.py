@@ -32,7 +32,5 @@ with gr.Blocks() as dataviewer:
     data_file = gr.File(label='数据文件')
     download_button.click(fn=dump_data_to_csv, inputs=data, outputs=data_file)
 
-
-
 if __name__ == '__main__':
     dataviewer.launch(show_api=False, share=True)

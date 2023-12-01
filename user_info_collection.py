@@ -36,7 +36,7 @@ with gr.Blocks() as user_info_collection:
     submit_button.click(submit_user_info, inputs=[name, student_id, gender, phone], outputs=submit_flag,
                         js=save_student_id_to_cookie_js)
     submit_flag.change(fn=lambda x: x, inputs=submit_flag,
-                       js="window.location.href = 'http://127.0.0.1:8000/introduction'")
+                       js="window.location.href = 'http://49.232.250.86/introduction'")
 
 
 if __name__ == '__main__':
