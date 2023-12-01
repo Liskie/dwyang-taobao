@@ -123,6 +123,11 @@ class DBManager:
             'speech_variable': user_data['speech_variable'],
         }
 
+    def select_all_users(self) -> pd.DataFrame:
+        sql = '''select * from users'''
+        user_df = pd.read_sql_query(sql, self.conn)
+        return user_df
+
     def __enter__(self):
         return self
 
