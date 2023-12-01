@@ -4,14 +4,17 @@ from data_models import User
 from db_manager import DBManager
 
 
-def update_user_expected_compensation(user_student_id: str, expected_compensation: str):
+def update_user_expected_compensation(user_student_id: str, expected_compensation: str) -> gr.Textbox:
     if not user_student_id:
         gr.Info(f"请先填写基本信息！")
-        return
+        return gr.Textbox(value='False', visible=False)
     with DBManager() as manager:
         if not manager.check_user_exists_by_student_id(user_student_id):
             gr.Info(f"请先填写基本信息！")
+            return gr.Textbox(value='False', visible=False)
         manager.update_user_expected_compensation(user_student_id, expected_compensation)
+    gr.Info(f"提交成功！")
+    return gr.Textbox(value='True', visible=False)
 
 
 with gr.Blocks() as introduction:
@@ -37,8 +40,8 @@ with gr.Blocks() as introduction:
     expected_compensation = gr.Textbox(label='预期赔偿金额', lines=1, placeholder="2400")
 
     submit_button = gr.Button("提交")
-    submit_flag = gr.Textbox(label='隐藏标识', lines=1, placeholder="请勿填写", visible=False)
-    hidden_student_id = gr.Textbox(label='隐藏标识', lines=1, placeholder="请勿填写", visible=False)
+    submit_flag = gr.Textbox(value='False', visible=False)
+    hidden_student_id = gr.Textbox(visible=False)
 
     get_user_student_id_from_cookie_js = """
     function getStudentIdAndExpectedCompensation(hidden_student_id, expected_compensation) {
@@ -61,10 +64,12 @@ with gr.Blocks() as introduction:
         return [student_id, expected_compensation];
     }
     """
-    submit_button.click(update_user_expected_compensation, inputs=[hidden_student_id, expected_compensation],
+    submit_button.click(fn=update_user_expected_compensation,
+                        inputs=[hidden_student_id, expected_compensation],
+                        outputs=submit_flag,
                         js=get_user_student_id_from_cookie_js)
-    # submit_flag.change(fn=lambda x: x, inputs=submit_flag,
-    #                    js="window.location.href = 'http://127.0.0.1:8000/introduction'")
+    submit_flag.change(None, None, None,
+                       js="window.location.href = 'http://127.0.0.1:8000/conversation'")
 
 if __name__ == '__main__':
     introduction.launch(show_api=False, share=True)

@@ -9,8 +9,8 @@ def submit_user_info(name: str, student_id: str, gender: str, phone: str = None)
     with DBManager() as manager:
         manager.insert_user(user)
         manager.update_user_variables(user)
-    gr.Info(f"基本信息提交成功！")
-    return 'success'
+    gr.Info(f"提交成功！")
+    return 'True'
 
 
 with gr.Blocks() as user_info_collection:
@@ -24,7 +24,7 @@ with gr.Blocks() as user_info_collection:
                        info="请填写11位手机号码, 如果抽到电话回访并参与会有50元红包赠送哦")
 
     submit_button = gr.Button("提交")
-    submit_flag = gr.Textbox(label='隐藏标识', lines=1, placeholder="请勿填写", visible=False)
+    submit_flag = gr.Textbox(value='False', visible=False)
     save_student_id_to_cookie_js = """
     function saveStudentIdCookie(name, student_id, gender, phone) {
         var expires = new Date();
