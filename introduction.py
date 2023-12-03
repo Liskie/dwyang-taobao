@@ -1,6 +1,5 @@
 import gradio as gr
 
-from data_models import User
 from db_manager import DBManager
 
 

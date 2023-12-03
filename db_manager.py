@@ -3,7 +3,7 @@ import json
 
 import pandas as pd
 
-from data_models import User, NeutralityEnum, ReplierEnum, SpeechEnum
+from data_models import NeutralityEnum, ReplierEnum, SpeechEnum
 
 
 class DBManager:
@@ -18,6 +18,8 @@ class DBManager:
                     student_id text unique,
                     gender text,
                     phone text,
+                    has_solved_dispute text,
+                    dispute_times text,
                     neutrality_variable text,
                     replier_variable text,
                     speech_variable text,
@@ -38,20 +40,21 @@ class DBManager:
         self.cursor.execute(sql)
         self.conn.commit()
 
-    def insert_user(self, user: User) -> None:
+    def insert_user(self, name: str, student_id: str, gender: str, phone: str,
+                    has_solved_dispute: str, dispute_times: str) -> None:
         try:
-            sql = '''insert into users (name, student_id, gender, phone, conversation) 
-                values (?, ?, ?, ?, ?)
+            sql = '''insert into users (name, student_id, gender, phone, has_solved_dispute, dispute_times) 
+                values (?, ?, ?, ?, ?, ?)
             '''
-            data = (user.name, user.student_id, user.gender, user.phone, json.dumps(user.conversation))
+            data = (name, student_id, gender, phone, has_solved_dispute, dispute_times)
             self.cursor.execute(sql, data)
             self.conn.commit()
         except sqlite3.IntegrityError:
-            print(f"User with student_id {user.student_id} already exists.")
+            print(f"User with student_id {student_id} already exists.")
 
-    def select_user(self, user: User) -> dict:
+    def select_user(self, student_id: str) -> dict:
         sql = '''select * from users where student_id = ?'''
-        data = [user.student_id]
+        data = [student_id]
         user_df = pd.read_sql_query(sql, self.conn, params=data)
         if len(user_df) > 1:
             raise Exception('Duplicate user exists!')
@@ -79,17 +82,17 @@ class DBManager:
         self.cursor.execute(sql, data)
         self.conn.commit()
 
-    def update_user_variables(self, user: User) -> None:
-        user_properties: dict = self.select_user(user)
+    def update_user_variables(self, student_id: str) -> None:
+        user_properties: dict = self.select_user(student_id)
         user_id: int = user_properties['id']
         flags = list(bin(user_id % 8).lstrip('0b').zfill(3))
-        user.neutrality_variable = NeutralityEnum.COURT if flags[0] == '1' else NeutralityEnum.CUSTOMER_SERVICE
-        user.replier_variable = ReplierEnum.HUMAN if flags[1] == '1' else ReplierEnum.SYSTEM
-        user.speech_variable = SpeechEnum.FREE_TYPING if flags[2] == '1' else SpeechEnum.CHOICES_ONLY
+        neutrality_variable = NeutralityEnum.COURT if flags[0] == '1' else NeutralityEnum.CUSTOMER_SERVICE
+        replier_variable = ReplierEnum.HUMAN if flags[1] == '1' else ReplierEnum.SYSTEM
+        speech_variable = SpeechEnum.FREE_TYPING if flags[2] == '1' else SpeechEnum.CHOICES_ONLY
         sql = '''update users 
             set neutrality_variable = ?, replier_variable = ?, speech_variable = ? 
             where id = ?'''
-        data = (user.neutrality_variable.value, user.replier_variable.value, user.speech_variable.value, user_id)
+        data = (neutrality_variable.value, replier_variable.value, speech_variable.value, user_id)
         self.cursor.execute(sql, data)
         self.conn.commit()
 
