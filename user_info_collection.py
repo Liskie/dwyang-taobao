@@ -32,10 +32,10 @@ with gr.Blocks(title='模拟纠纷实验') as user_info_collection:
     """)
 
     name = gr.Textbox(label='姓名', lines=1, placeholder="张三")
-    student_id = gr.Textbox(label='学号', lines=1, placeholder="20021827")
+    student_id = gr.Textbox(label='学号', lines=1, placeholder="210101001")
     gender = gr.Radio(label='性别', choices=['男', '女', '其他'])
     phone = gr.Textbox(label='电话', lines=1, placeholder="18868889888",
-                       info="请填写11位手机号码, 如果抽到电话回访并参与会有50元红包赠送哦")
+                       info="（非必填）留下电话有机会抽到回访，可领取实验补贴50元。")
     has_solved_dispute = gr.Radio(label='您是否曾在网购平台上解决过纠纷？', choices=['是', '否'])
     dispute_times = gr.Textbox(visible=False, label="您在网购平台上尝试解决纠纷的次数", placeholder='0')
 
