@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 import gradio as gr
 
 from ending import ending
+from opening import opening
 from user_info_collection import user_info_collection
 from introduction import introduction
 from conversation import conversation
@@ -14,9 +15,10 @@ app = FastAPI()
 
 @app.get("/")
 def read_main():
-    return RedirectResponse(url="/user-info-collection")
+    return RedirectResponse(url="/opening")
 
 
+app = gr.mount_gradio_app(app, opening, path='/opening')
 app = gr.mount_gradio_app(app, user_info_collection, path='/user-info-collection')
 app = gr.mount_gradio_app(app, introduction, path='/introduction')
 app = gr.mount_gradio_app(app, conversation, path='/conversation')
