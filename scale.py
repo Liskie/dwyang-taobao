@@ -37,7 +37,7 @@ def submit_scale(student_id, authority_level, consideration_level, respect_level
     gr.Info(f"提交成功！")
 
 
-with gr.Blocks() as scale:
+with gr.Blocks(title='模拟纠纷实验') as scale:
     gr.Markdown("""# Step 4：填写量表
     请根据你的实际感受，为每个维度填写合适的分数。
     

@@ -240,7 +240,7 @@ def update_logo(neutrality_variable):
             raise ValueError(f"Unknown neutrality variable: {neutrality_variable}")
 
 
-with gr.Blocks() as conversation:
+with gr.Blocks(title='模拟纠纷实验') as conversation:
     gr.Markdown("""# Step 3：对话""")
 
     with gr.Row(visible=True) as debug_settings:

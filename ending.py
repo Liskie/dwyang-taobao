@@ -1,7 +1,7 @@
 import gradio as gr
 
 
-with gr.Blocks() as ending:
+with gr.Blocks(title='模拟纠纷实验') as ending:
     gr.Markdown("""# 感谢您的参与！
     
     全部流程已经结束，感谢您的参与！

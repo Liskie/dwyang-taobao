@@ -13,7 +13,7 @@ def submit_user_info(name: str, student_id: str, gender: str, phone: str = None)
     return 'True'
 
 
-with gr.Blocks() as user_info_collection:
+with gr.Blocks(title='模拟纠纷实验') as user_info_collection:
     gr.Markdown("""# Step 1：基本信息填写
     """)
 

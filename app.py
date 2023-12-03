@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends, Cookie, Response
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 import gradio as gr
 
 from ending import ending
@@ -14,7 +14,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_main():
-    return {"message": "This is your main app"}
+    return RedirectResponse(url="/user-info-collection")
 
 
 app = gr.mount_gradio_app(app, user_info_collection, path='/user-info-collection')

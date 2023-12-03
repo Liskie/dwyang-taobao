@@ -17,7 +17,7 @@ def update_user_expected_compensation(user_student_id: str, expected_compensatio
     return gr.Textbox(value='True', visible=False)
 
 
-with gr.Blocks() as introduction:
+with gr.Blocks(title='模拟纠纷实验') as introduction:
     gr.Markdown("""# Step 2：场景简介
     
     你于淘宝平台“深圳电子零售店”以800的价格购买了无线耳机一副，使用感受很差，和朋友的正品耳机对比觉得存在明显不同，发现买到了假货。
