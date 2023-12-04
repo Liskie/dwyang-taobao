@@ -18,6 +18,7 @@ get_user_student_id_from_cookie_js = """
             }
             return cookieValue;
         }
+        document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
         return getCookie('user_student_id');
     }
     """

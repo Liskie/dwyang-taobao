@@ -43,6 +43,12 @@ with gr.Blocks(title='模拟纠纷实验') as introduction:
     submit_flag = gr.Textbox(value='False', visible=False)
     hidden_student_id = gr.Textbox(visible=False)
 
+    introduction.load(None, None, None, js="""
+    function ban_zoom() {
+        document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    }
+    """)
+
     get_user_student_id_from_cookie_js = """
     function getStudentIdAndExpectedCompensation(hidden_student_id, expected_compensation) {
         function getCookie(name) {

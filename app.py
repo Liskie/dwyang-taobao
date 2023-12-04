@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, Cookie, Response
 from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 import gradio as gr
 
 from ending import ending
@@ -17,6 +18,8 @@ app = FastAPI()
 def read_main():
     return RedirectResponse(url="/opening")
 
+
+app.mount("/static", StaticFiles(directory="pics"), name="static")
 
 app = gr.mount_gradio_app(app, opening, path='/opening')
 app = gr.mount_gradio_app(app, user_info_collection, path='/user-info-collection')

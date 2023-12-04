@@ -39,6 +39,12 @@ with gr.Blocks(title='模拟纠纷实验') as user_info_collection:
     has_solved_dispute = gr.Radio(label='您是否曾在网购平台上解决过纠纷？', choices=['是', '否'])
     dispute_times = gr.Textbox(visible=False, label="您在网购平台上尝试解决纠纷的次数", placeholder='0')
 
+    user_info_collection.load(None, None, None, js="""
+    function ban_zoom() {
+        document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    }
+    """)
+
     has_solved_dispute.change(update_dispute_times, has_solved_dispute, dispute_times)
 
     submit_button = gr.Button("提交")
